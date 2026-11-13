@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RadarBairro · Protótipo Navegável CitizenTech</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+  <!-- Barra de demonstracao rapida para avaliacao do professor -->
+  <header class="barra-demonstracao">
+    <div class="info-topo">
+      <span class="tag-gs">FIAP GLOBAL SOLUTION · CITIZENTECH</span>
+      <strong>RadarBairro</strong>
+      <span style="font-size:12px; color:#94a3b8;">Renan Santa Rosa Xavier · RM 566997</span>
+    </div>
+    <div class="atalhos-telas">
+      <button class="btn-atalho ativo" onclick="aplicarCenaDemonstracao(1, this)">1. Mapa Geral (QuintoAndar)</button>
+      <button class="btn-atalho" onclick="aplicarCenaDemonstracao(2, this)">2. Filtro Energia</button>
+      <button class="btn-atalho" onclick="aplicarCenaDemonstracao(3, this)">3. Filtro Água</button>
+      <button class="btn-atalho" onclick="aplicarCenaDemonstracao(4, this)">4. Raio-X + IA (Airbnb)</button>
+      <button class="btn-atalho" onclick="aplicarCenaDemonstracao(5, this)">5. Relatar (Waze)</button>
+      <button class="btn-atalho" onclick="aplicarCenaDemonstracao(6, this)">6. Feed e Apoio (Colab)</button>
+    </div>
+  </header>
+
+  <!-- Moldura do Celular -->
+  <main class="moldura-celular" id="aparelho-celular">
+
+    <!-- Barra de status do Android -->
+    <div class="barra-status-celular">
+      <span>09:41</span>
+      <span style="color:#e40f37; font-weight:800; letter-spacing:0.3px;">RadarBairro</span>
+      <span>5G · 94%</span>
+    </div>
+
+    <!-- Aviso flutuante (Toast) -->
+    <div id="toast-sistema" class="aviso-toast"></div>
+
+    <div class="conteudo-tela">
+
+      <!-- =========================================================
+           ABA 1: MAPA DE CALOR E BUSCA (REFERENCIA QUINTOANDAR + WAZE)
+           ========================================================= -->
+      <section id="visao-mapa" class="visao ativa">
+
+        <!-- Topo flutuante: Busca + Estado + Pilulas de Filtro -->
+        <div class="topo-flutuante-mapa">
+          <div class="caixa-busca">
+            <svg class="icone-lupa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+            </svg>
+            <input type="text" id="campo-busca" placeholder="Buscar bairro ou cidade (ex: Pinheiros, Mooca)..." oninput="pesquisarNoMapa(this.value)">
+            <select id="seletor-uf" class="seletor-estado" onchange="trocarEstadoMapa(this.value)">
+              <option value="SP">SP</option>
+              <option value="RJ">RJ</option>
+              <option value="MG">MG</option>
+            </select>
+          </div>
+
+          <!-- Pilulas de Filtro (Estilo QuintoAndar) -->
+          <div class="linha-pilulas">
+            <button id="pilula-geral" class="pilula ativa" onclick="filtrarCategoriaMapa('geral', this)">Visão Geral</button>
+            <button id="pilula-agua" class="pilula" onclick="filtrarCategoriaMapa('agua', this)">Água</button>
+            <button id="pilula-energia" class="pilula" onclick="filtrarCategoriaMapa('energia', this)">Energia</button>
+            <button id="pilula-alagamento" class="pilula" onclick="filtrarCategoriaMapa('alagamento', this)">Alagamento</button>
+            <button id="pilula-seguranca" class="pilula" onclick="filtrarCategoriaMapa('seguranca', this)">Segurança</button>
+            <button id="pilula-calcadas" class="pilula" onclick="filtrarCategoriaMapa('calcadas', this)">Calçadas</button>
+          </div>
+
+          <!-- Legenda compacta -->
+          <div class="legenda-mapa">
+            <span><i class="ponto-cor" style="background:#16a34a"></i>Bom (4.0+)</span>
+            <span><i class="ponto-cor" style="background:#d97706"></i>Regular (3.0+)</span>
+            <span><i class="ponto-cor" style="background:#dc2626"></i>Crítico (&lt;3.0)</span>
+          </div>
+        </div>
+
+        <!-- Mapa Vetorial Limpo estilo QuintoAndar -->
+        <div class="area-mapa">
+          <svg class="mapa-svg" viewBox="0 0 380 732" preserveAspectRatio="none">
+            <!-- Fundo urbano claro -->
+            <rect width="380" height="732" fill="#eef2f6"/>
+
+            <!-- Areas verdes / Parques urbanos -->
+            <path d="M125,222 L175,218 L178,255 L128,258 Z" fill="#dcfce7" opacity="0.85"/>
+            <path d="M15,92 L95,88 L90,132 L18,128 Z" fill="#dcfce7" opacity="0.85"/>
+            <path d="M275,255 L355,250 L358,310 L278,315 Z" fill="#dcfce7" opacity="0.85"/>
+
+            <!-- Quarteiroes de fundo -->
+            <g stroke="#e2e8f0" stroke-width="1.5" fill="#f8fafc">
+              <rect x="18" y="130" width="75" height="55" rx="4"/>
+              <rect x="102" y="130" width="75" height="55" rx="4"/>
+              <rect x="186" y="130" width="80" height="55" rx="4"/>
+              <rect x="275" y="130" width="88" height="55" rx="4"/>
+              <rect x="18" y="195" width="75" height="60" rx="4"/>
+              <rect x="102" y="195" width="75" height="60" rx="4"/>
+              <rect x="186" y="195" width="80" height="60" rx="4"/>
+              <rect x="275" y="195" width="88" height="60" rx="4"/>
+              <rect x="18" y="265" width="85" height="65" rx="4"/>
+              <rect x="112" y="265" width="85" height="65" rx="4"/>
+              <rect x="206" y="265" width="85" height="65" rx="4"/>
+            </g>
+
+            <!-- Rios (Marginal Tiete e Marginal Pinheiros) -->
+            <path d="M 0,166 Q 130,174 240,155 T 380,148" fill="none" stroke="#bae6fd" stroke-width="11"/>
+            <path d="M 140,168 Q 115,240 85,350 L 65,480" fill="none" stroke="#bae6fd" stroke-width="10"/>
+
+            <!-- Avenidas e Malha Viaria Principal -->
+            <g stroke="#ffffff" stroke-width="4.5" fill="none">
+              <path d="M 0,210 L 380,198"/>
+              <path d="M 142,80 L 165,480"/>
+              <path d="M 260,80 L 245,480"/>
+              <path d="M 0,285 L 380,295"/>
+            </g>
+            <g stroke="#cbd5e1" stroke-width="1" fill="none" stroke-dasharray="4,4">
+              <path d="M 0,210 L 380,198"/>
+              <path d="M 142,80 L 165,480"/>
+              <path d="M 260,80 L 245,480"/>
+            </g>
+
+            <!-- Rotulos discretos de vias -->
+            <text x="268" y="144" fill="#64748b" font-size="8.5" font-weight="700">MARGINAL TIETÊ</text>
+            <text x="122" y="250" fill="#15803d" font-size="8.5" font-weight="700">PQ. IBIRAPUERA</text>
+            <text x="272" y="192" fill="#64748b" font-size="8.5" font-weight="700">RADIAL LESTE</text>
+
+            <!-- Camada dinamica: Poligonos coloridos dos bairros -->
+            <g id="camada-bairros"></g>
+
+            <!-- Camada dinamica: Marcadores de nota (Pins) -->
+            <g id="camada-pins"></g>
+          </svg>
+        </div>
+
+        <!-- Botao Flutuante FAB (Estilo Waze) -->
+        <button id="botao-fab" class="botao-fab-waze com-aba-aberta" onclick="abrirModalWaze()">
+          <span style="font-size:16px; line-height:1;">+</span>
+          <span>Relatar Problema</span>
+        </button>
+
+        <!-- Bottom Sheet (Aba Inferior estilo QuintoAndar) -->
+        <div id="aba-inferior" class="aba-inferior-bairro aberta">
+          <div class="puxador-aba" onclick="fecharAbaInferior()" title="Fechar aba"></div>
+          <div class="cabecalho-aba">
+            <div>
+              <h3 id="aba-nome-bairro">Vila Mariana</h3>
+              <p id="aba-sub-bairro">São Paulo - SP · Zona Sul · 412 relatos</p>
+            </div>
+            <div id="aba-selo-nota" class="selo-nota-aba" style="background:#16a34a;">4.6 · Nota Geral</div>
+          </div>
+
+          <div id="aba-resumo-curto" class="resumo-curto-aba">
+            Região alta com baixíssimo índice de alagamentos e fornecimento de água muito regular.
+          </div>
+
+          <div class="mini-metricas-aba">
+            <div class="mini-metrica">
+              <span>Água</span>
+              <strong id="aba-nota-agua">4.8 / 5</strong>
+            </div>
+            <div class="mini-metrica">
+              <span>Energia</span>
+              <strong id="aba-nota-energia">4.4 / 5</strong>
+            </div>
+            <div class="mini-metrica">
+              <span>Sem Alagar</span>
+              <strong id="aba-nota-alagamento">4.7 / 5</strong>
+            </div>
+          </div>
+
+          <div class="botoes-aba">
+            <button class="btn-primario" onclick="navegarParaAba('visao-raiox')">Ver Raio-X e IA</button>
+            <button class="btn-secundario" onclick="navegarParaAba('visao-feed')">Relatos da Rua</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           ABA 2: RAIO-X DO BAIRRO E RESUMO IA (REFERENCIA AIRBNB)
+           ========================================================= -->
+      <section id="visao-raiox" class="visao">
+        <div class="tela-rolavel">
+          <div class="topo-raiox">
+            <div>
+              <span style="font-size:11px; font-weight:700; color:#e40f37; text-transform:uppercase;">Raio-X de Qualidade Urbana</span>
+              <h2 id="raiox-nome">Pinheiros</h2>
+              <p id="raiox-cidade">São Paulo - SP (Zona Oeste)</p>
+            </div>
+            <div class="bloco-nota-airbnb">
+              <div id="raiox-nota-geral" class="numero-grande" style="color:#16a34a;">4.1</div>
+              <span id="raiox-total-aval">318 moradores avaliaram</span>
+            </div>
+          </div>
+
+          <!-- Caixa de Destaque da IA (Referencia Airbnb) -->
+          <div class="card-resumo-ia">
+            <div class="titulo-card-ia">
+              <strong>Resumo do Bairro gerado por IA</strong>
+              <span class="etiqueta-ia">Síntese de Moradores</span>
+            </div>
+            <p id="raiox-texto-ia">
+              Bairro com abastecimento de água estável e boas calçadas nas vias principais. O ponto fraco mais citado pelos moradores nos últimos 60 dias é a queda de energia elétrica quando chove forte.
+            </p>
+          </div>
+
+          <!-- Barras de Progresso Horizontais (Termometro do Bairro) -->
+          <div class="secao-barras">
+            <h3>Termômetro de Infraestrutura (0 a 5)</h3>
+            <div id="raiox-container-barras"></div>
+          </div>
+
+          <!-- Problemas mais relatados na comunidade -->
+          <div class="secao-problemas">
+            <h3>Problemas Recorrentes Citados por Moradores</h3>
+            <ul id="raiox-lista-problemas" class="lista-problemas-bairro"></ul>
+          </div>
+
+          <!-- Acao CitizenTech para quem ja mora no bairro -->
+          <div class="caixa-acao-cidada">
+            <p>Mora neste bairro e sofre com esses problemas? Gere um relatório coletivo com os dados da comunidade.</p>
+            <button class="btn-primario" style="width:100%;" onclick="gerarRelatorioComunitario()">
+              Exportar Dossiê para Prefeitura / Concessionária
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           ABA 3: FEED DA COMUNIDADE E APOIO (REFERENCIA COLAB)
+           ========================================================= -->
+      <section id="visao-feed" class="visao">
+        <div class="cabecalho-feed">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>Mural da Comunidade</h2>
+            <button class="btn-primario" style="flex:0; padding:6px 12px; font-size:12px;" onclick="abrirModalWaze()">+ Novo Alerta</button>
+          </div>
+          <p>Confirme os problemas da sua rua para atualizar o mapa de calor e cobrar solução.</p>
+        </div>
+
+        <div id="container-lista-feed" class="lista-feed"></div>
+      </section>
+
+      <!-- =========================================================
+           MODAL ESCURO DE RELATO RAPIDO (REFERENCIA WAZE)
+           ========================================================= -->
+      <div id="modal-waze" class="modal-waze-fundo">
+        <div class="painel-waze">
+          <div class="topo-waze">
+            <div>
+              <h3>O que está acontecendo na rua?</h3>
+              <p>Toque no ícone para alertar vizinhos e quem pesquisa o bairro</p>
+            </div>
+            <button class="btn-fechar-waze" onclick="fecharModalWaze()">X</button>
+          </div>
+
+          <div class="grade-icones-waze">
+            <div class="item-icone-waze" onclick="escolherIconeWaze('agua', this)">
+              <div class="bola-icone" style="background:#0284c7;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+              </div>
+              <span>Falta d'Água</span>
+            </div>
+            <div class="item-icone-waze selecionado" onclick="escolherIconeWaze('energia', this)">
+              <div class="bola-icone" style="background:#d97706;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <span>Queda de Luz</span>
+            </div>
+            <div class="item-icone-waze" onclick="escolherIconeWaze('alagamento', this)">
+              <div class="bola-icone" style="background:#7c3aed;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M2 20c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M8 10a4 4 0 0 1 8 0"/></svg>
+              </div>
+              <span>Rua Alagada</span>
+            </div>
+            <div class="item-icone-waze" onclick="escolherIconeWaze('iluminacao', this)">
+              <div class="bola-icone" style="background:#475569;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+              </div>
+              <span>Poste Escuro</span>
+            </div>
+            <div class="item-icone-waze" onclick="escolherIconeWaze('calcadas', this)">
+              <div class="bola-icone" style="background:#059669;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19L9 5"/><path d="M15 5l5 14"/><path d="M12 7v3"/><path d="M12 14v4"/></svg>
+              </div>
+              <span>Calçada Ruim</span>
+            </div>
+            <div class="item-icone-waze" onclick="escolherIconeWaze('seguranca', this)">
+              <div class="bola-icone" style="background:#dc2626;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <span>Segurança</span>
+            </div>
+          </div>
+
+          <div class="campos-relato-waze">
+            <select id="waze-select-bairro"></select>
+            <input type="text" id="waze-input-rua" placeholder="Rua e altura (ex: Rua Simão Álvares, 700)">
+            <textarea id="waze-input-texto" rows="2" placeholder="Explique rapidamente o problema (ex: Acabou a luz após a chuva)..."></textarea>
+          </div>
+
+          <button class="btn-primario" style="width:100%; padding:12px;" onclick="enviarRelatoWaze()">
+            Publicar Alerta no Mapa
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Menu de Navegacao Inferior -->
+    <nav class="menu-inferior-app">
+      <button id="menu-btn-mapa" class="item-menu-inferior ativo" onclick="navegarParaAba('visao-mapa')">
+        <span>Mapa de Calor</span>
+      </button>
+      <button id="menu-btn-raiox" class="item-menu-inferior" onclick="navegarParaAba('visao-raiox')">
+        <span>Raio-X e IA</span>
+      </button>
+      <button id="menu-btn-feed" class="item-menu-inferior" onclick="navegarParaAba('visao-feed')">
+        <span>Comunidade</span>
+      </button>
+    </nav>
+
+  </main>
+
+  <script src="dados.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

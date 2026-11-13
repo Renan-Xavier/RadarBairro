@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>RadarBairro · Global Solution CitizenTech FIAP</title>
+<style>
+:root {
+  --acento: #e40f37;        /* cor principal: títulos, destaques, setas */
+  --acento-escuro: #b90c2d;
+  --tinta: #221f1f;         /* texto */
+  --suave: #686970;         /* texto secundário */
+  --linha: #dedee6;         /* bordas */
+  --fundo-claro: #f7f6f8;   /* caixas cinza */
+  --cinza: #6b6872;         /* etiqueta "antes" */
+}
+@page { size: 338.67mm 190.5mm; margin: 10mm 14mm 11mm;
+  @bottom-left { content: "RadarBairro · Renan Santa Rosa Xavier (RM566997)"; font: 9pt "Segoe UI", Arial, sans-serif; color: #989aa3; }
+  @bottom-right { content: counter(page) " / " counter(pages); font: 9pt "Segoe UI", Arial, sans-serif; color: #989aa3; } }
+* { box-sizing: border-box; }
+html { font-size: 13pt; }
+body { margin: 0; color: var(--tinta); font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; line-height: 1.45; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+img { max-width: 100%; }
+
+/* estrutura de todo slide */
+.slide { height: 168mm; break-after: page; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+.slide:last-child { break-after: auto; }
+.slide > h2 { font-size: 26pt; margin: 0 0 3px; padding-left: 14px; border-left: 7px solid var(--acento); line-height: 1.15; padding-right: 45mm; }
+.slide > .sub { color: var(--suave); font-size: 13.5pt; margin: 0 0 12px 21px; padding-right: 45mm; }
+.corpo { flex: 1; min-height: 0; }
+
+/* logo no cabeçalho */
+.logo-cabecalho { position: absolute; top: 1mm; right: 0; height: 11mm; width: auto; object-fit: contain; }
+.logo-capa { height: 15mm; width: auto; object-fit: contain; display: block; margin-bottom: 14px; margin-left: -4px; }
+
+/* lugar de imagem */
+.ph { display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px; border: 2px dashed #c9c8d2; border-radius: 12px; background: repeating-linear-gradient(135deg, #fafafb 0 14px, #f3f2f6 14px 28px); color: #8a8791; font-size: 11pt; }
+.print { border-radius: 10px; border: 1px solid #cfced8; box-shadow: 0 8px 22px rgba(34, 31, 31, .14); display: block; }
+
+/* 1. capa */
+.capa { display: grid !important; grid-template-columns: 1fr 150mm; gap: 12mm; align-items: center; }
+.capa .marca { font-weight: 800; letter-spacing: 3px; color: var(--acento); font-size: 13pt; margin-bottom: 18px; }
+.capa h1 { font-size: 50pt; line-height: 1.05; margin: 0 0 14px; letter-spacing: -1px; }
+.capa .lead { font-size: 18.5pt; color: #3c3a40; margin: 0; }
+.capa .data { color: var(--suave); margin-top: 22px; font-size: 13.5pt; }
+
+/* divisória de seção */
+.divisoria { justify-content: center; }
+.divisoria .n { font-size: 70pt; font-weight: 800; color: var(--acento); line-height: 1; }
+.divisoria h2 { font-size: 36pt; border: 0; padding: 0; margin: 6px 0 10px; }
+.divisoria p { font-size: 17pt; max-width: 220mm; color: #3c3a40; }
+
+/* cartões */
+.cartoes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-content: center; }
+.cartoes.quatro { grid-template-columns: repeat(4, 1fr); }
+.cartao { border: 1px solid var(--linha); border-top: 6px solid var(--acento); border-radius: 14px; padding: 18px 20px; background: #fff; }
+.cartao .icone { width: 52px; height: 52px; border-radius: 14px; background: var(--acento); color: #fff; display: grid; place-items: center; font-size: 20pt; font-weight: 800; margin-bottom: 12px; }
+.cartao h3 { margin: 0 0 6px; font-size: 16.5pt; }
+.cartao p { margin: 0; color: #3c3a40; font-size: 13pt; }
+
+/* fluxo em passos */
+.fluxo { display: flex; align-items: stretch; gap: 10px; align-self: center; width: 100%; }
+.fluxo .passo { flex: 1; border: 1px solid var(--linha); border-radius: 14px; padding: 16px; background: #fff; text-align: center; }
+.fluxo .passo b { display: block; font-size: 30pt; color: var(--acento); line-height: 1; margin-bottom: 8px; }
+.fluxo .passo strong { display: block; font-size: 15pt; margin-bottom: 4px; }
+.fluxo .passo span { color: var(--suave); font-size: 12pt; }
+.fluxo .seta { align-self: center; color: var(--acento); font-size: 26pt; font-weight: 800; }
+
+/* antes x depois */
+.lados { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-content: center; }
+.lado { border: 1px solid var(--linha); border-radius: 14px; padding: 20px 24px; background: #fff; }
+.lado.antes { background: var(--fundo-claro); }
+.lado.depois { border-top: 6px solid var(--acento); }
+.chip { display: inline-block; font-size: 10pt; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; padding: 3px 12px; border-radius: 999px; color: #fff; background: var(--acento); margin-bottom: 12px; }
+.antes .chip { background: var(--cinza); }
+.lado ul { margin: 0; padding-left: 22px; font-size: 15.5pt; }
+.lado li { margin: 12px 0; }
+
+/* números grandes */
+.numeros { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; align-content: center; }
+.numeros div { border-radius: 16px; padding: 22px; background: var(--fundo-claro); border: 1px solid var(--linha); color: var(--suave); font-size: 13pt; }
+.numeros strong { display: block; font-size: 44pt; color: var(--tinta); line-height: 1.05; margin-bottom: 6px; }
+.numeros div:first-child { background: var(--acento); color: #fff; border-color: var(--acento); }
+.numeros div:first-child strong { color: #fff; }
+
+/* telas lado a lado */
+.telas { display: flex; gap: 10mm; justify-content: center; align-items: flex-start; }
+.telas figure { margin: 0; text-align: center; flex: 0 1 auto; min-width: 0; }
+.telas .ph, .telas img { height: 112mm; width: 54mm; margin: 0 auto; border-radius: 6mm; object-fit: contain; }
+.telas figcaption { margin-top: 10px; font-size: 12pt; max-width: 70mm; }
+.telas figcaption b { display: block; font-size: 13.5pt; }
+
+/* diagrama */
+.diagrama { display: flex; align-items: center; justify-content: center; }
+.diagrama svg { width: 100%; max-height: 140mm; font-family: "Segoe UI", Arial, sans-serif; }
+
+/* frase de destaque */
+.destaque { justify-content: center; padding: 0 30mm; }
+.destaque blockquote { margin: 0; font-size: 32pt; line-height: 1.25; font-weight: 650; border-left: 10px solid var(--acento); padding-left: 26px; }
+.destaque .quem { margin: 18px 0 0 36px; color: var(--suave); font-size: 15pt; }
+</style>
+</head>
+<body>
+
+<!-- 1 · CAPA (Item 1: Identificação da equipe e do aplicativo) -->
+<section class="slide capa">
+  <div>
+    <img class="logo-capa" src="logo_fiap.png" alt="Logo FIAP">
+    <div class="marca">GLOBAL SOLUTION · CITIZENTECH · 2TDS</div>
+    <h1>RadarBairro</h1>
+    <p class="lead">Mapa colaborativo de qualidade de vida e problemas reais de infraestrutura por bairro.</p>
+    <p class="data">Renan Santa Rosa Xavier · RM 566997</p>
+  </div>
+  <div class="telas" style="align-items:center">
+    <img class="print" src="tela_01_mapa_geral.png" alt="Mapa de Calor do Bairro" style="height:142mm;width:auto">
+    <img class="print" src="tela_04_raiox_ia.png" alt="Raio-X do Bairro com IA" style="height:142mm;width:auto">
+  </div>
+</section>
+
+<!-- 2 · ANTES E DEPOIS (Item 2: Problema identificado e contexto) -->
+<section class="slide">
+  <img class="logo-cabecalho" src="logo_fiap.png" alt="Logo FIAP">
+  <h2>Falta transparência sobre os bairros</h2>
+  <p class="sub">Moradores e pessoas de mudança descobrem problemas da rua tarde demais.</p>
+  <div class="corpo lados">
+    <div class="lado antes"><span class="chip">Hoje</span>
+      <ul>
+        <li>Quem vai morar descobre falta de água só depois da mudança.</li>
+        <li>Morador sem luz não sabe se o problema atingiu a rua.</li>
+        <li>Queixas ficam perdidas em grupos fechados sem histórico por endereço.</li>
+        <li>Ruas com alagamento e calçadas ruins não aparecem nos mapas.</li>
+      </ul>
+    </div>
+    <div class="lado depois"><span class="chip">Na proposta</span>
+      <ul>
+        <li>Mapa colorido mostra onde é bom ou crítico para morar.</li>
+        <li>Filtros separam notas de água, energia, alagamento e calçadas.</li>
+        <li>Moradores relatam problemas na rua e vizinhos confirmam na hora.</li>
+        <li>Resumo por IA sintetiza os relatos para facilitar a escolha.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · DESTAQUE (Público-alvo e proposta central) -->
+<section class="slide destaque">
+  <img class="logo-cabecalho" src="logo_fiap.png" alt="Logo FIAP">
+  <blockquote>Qualquer pessoa consulta a realidade de um bairro antes de se mudar e ganha força coletiva para cobrar melhorias na própria rua.</blockquote>
+  <p class="quem">Público-alvo: moradores locais, famílias em mudança, inquilinos, estudantes e idosos</p>
+</section>
+
+<!-- 4 · CARTÕES (As 4 referências visuais e o que faltava nelas) -->
+<section class="slide">
+  <img class="logo-cabecalho" src="logo_fiap.png" alt="Logo FIAP">
+  <h2>Referências visuais e o que faltava</h2>
+  <p class="sub">Unimos a facilidade de quatro grandes aplicativos sem função imobiliária.</p>
+  <div class="corpo cartoes quatro">
+    <div class="cartao"><div class="icone">1</div><h3>QuintoAndar</h3><p>Pílulas de filtro no topo e aba inferior no mapa, mas focado em infraestrutura.</p></div>
+    <div class="cartao"><div class="icone">2</div><h3>Waze</h3><p>Botão flutuante com ícones grandes para relatar problemas da rua em segundos.</p></div>
+    <div class="cartao"><div class="icone">3</div><h3>Colab</h3><p>Mural comunitário com botão Apoiar para validar problemas reais do bairro.</p></div>
+    <div class="cartao"><div class="icone">4</div><h3>Airbnb</h3><p>Barras de nota por categoria e caixa de destaque com resumo por IA.</p></div>
+  </div>
+</section>
+
+<!-- 5 · FLUXO (Item 3: Descrição do aplicativo e como será utilizado) -->
+<section class="slide">
+  <img class="logo-cabecalho" src="logo_fiap.png" alt="Logo FIAP">
+  <h2>Funcionamento em quatro passos</h2>
+  <p class="sub">Do relato do morador até a consulta no mapa de calor.</p>
+  <div class="corpo" style="display:flex;align-items:center">
+    <div class="fluxo">
+      <div class="passo"><b>1</b><strong>Relato na rua</strong><span>Morador registra falta de água, luz ou enchente</span></div><div class="seta">→</div>
+      <div class="passo"><b>2</b><strong>Apoio vizinho</strong><span>Moradores próximos confirmam que ocorre no local</span></div><div class="seta">→</div>
+      <div class="passo"><b>3</b><strong>Mapa e IA</strong><span>Sistema atualiza as cores e resume os relatos</span></div><div class="seta">→</div>
+      <div class="passo"><b>4</b><strong>Escolha ou cobrança</strong><span>Cidadão decide onde morar ou exporta dossiê</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · CARTÕES (Conexão com os ODS da ONU) -->
+<section class="slide">
+  <img class="logo-cabecalho" src="logo_fiap.png" alt="Logo FIAP">
+  <h2>Conexão com os ODS da ONU</h2>
+  <p class="sub">Alinhamento direto do aplicativo com as metas da Agenda 2030.</p>
+  <div class="corpo cartoes">
+    <div class="cartao"><div class="icone">11</div><h3>Cidades Sustentáveis</h3><p>Mapeia pontos de alagamento, saneamento e calçadas para melhorar a vida urbana.</p></div>
+    <div class="cartao"><div class="icone">10</div><h3>Menos Desigualdade</h3><p>Dá visibilidade para bairros periféricos que sofrem com cortes recorrentes de água.</p></div>
+    <div class="cartao"><div class="icone">09</div><h3>Infraestrutura</h3><p>Registra falhas constantes na rede elétrica e orienta prioridades de manutenção.</p></div>
+  </div>
+</section>
+
+<!-- 7 · TELAS 1, 2 E 3 (Mapa de Calor e Filtros estilo QuintoAndar) -->
+<section class="slide">
+  <img class="logo-cabecalho" src="logo_fiap.png" alt="Logo FIAP">
+  <h2>Mapa de calor e filtros rápidos</h2>
+  <p class="sub">Busca por estado ou bairro com troca imediata de camada.</p>
+  <div class="corpo telas">
+    <figure><img class="print" src="tela_01_mapa_geral.png" alt="Mapa Geral"><figcaption><b>Visão geral</b>Áreas em verde, amarelo e vermelho com aba inferior.</figcaption></figure>
+    <figure><img class="print" src="tela_02_filtro_energia.png" alt="Filtro de Energia"><figcaption><b>Filtro de energia</b>Destaca bairros com apagões frequentes na chuva.</figcaption></figure>
+    <figure><img class="print" src="tela_03_filtro_agua.png" alt="Filtro de Água"><figcaption><b>Filtro de água</b>Mostra regiões com falta recorrente de abastecimento.</figcaption></figure>
+  </div>
+</section>
+
+<!-- 8 · TELAS 4, 5 E 6 (Raio-X Airbnb, Alerta Waze e Feed Colab) -->
+<section class="slide">
+  <img class="logo-cabecalho" src="logo_fiap.png" alt="Logo FIAP">
+  <h2>Raio-X, alerta rápido e comunidade</h2>
+  <p class="sub">Resumo por IA, relato em segundos e validação entre vizinhos.</p>
+  <div class="corpo telas">
+    <figure><img class="print" src="tela_04_raiox_ia.png" alt="Raio-X e IA"><figcaption><b>Raio-X e IA</b>Resumo automático dos relatos e barras de 0 a 5.</figcaption></figure>
+    <figure><img class="print" src="tela_05_relatar_waze.png" alt="Relato Rápido"><figcaption><b>Relato rápido</b>Painel escuro com seis ícones grandes para alertar.</figcaption></figure>
+    <figure><img class="print" src="tela_06_feed_colab.png" alt="Mural da Comunidade"><figcaption><b>Mural e apoio</b>Lista de queixas com botão Apoiar para validar dados.</figcaption></figure>
+  </div>
+</section>
+
+<!-- 9 · DIAGRAMA DE ARQUITETURA (Item 5: Arquitetura do aplicativo) -->
+<section class="slide">
+  <img class="logo-cabecalho" src="logo_fiap.png" alt="Logo FIAP">
+  <h2>Arquitetura e integrações do sistema</h2>
+  <p class="sub">Comunicação entre aplicativo mobile, API, banco de dados e serviços externos.</p>
+  <div class="corpo diagrama">
+    <svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#e40f37"/></marker></defs>
+
+      <!-- App Mobile -->
+      <rect x="20" y="125" width="230" height="130" rx="18" fill="#fff" stroke="#221f1f" stroke-width="2"/>
+      <text x="135" y="175" text-anchor="middle" font-size="22" font-weight="700">App Mobile</text>
+      <text x="135" y="203" text-anchor="middle" font-size="15.5" fill="#e40f37" font-weight="700">React Native / Expo</text>
+      <text x="135" y="228" text-anchor="middle" font-size="14.5" fill="#686970">Mapa, filtros e relatos</text>
+
+      <!-- Backend / API -->
+      <rect x="365" y="105" width="260" height="170" rx="18" fill="#fff" stroke="#e40f37" stroke-width="3"/>
+      <text x="495" y="158" text-anchor="middle" font-size="23" font-weight="700">Backend / API REST</text>
+      <text x="495" y="186" text-anchor="middle" font-size="15.5" fill="#e40f37" font-weight="700">Java Spring Boot</text>
+      <text x="495" y="214" text-anchor="middle" font-size="14.5" fill="#686970">Valida apoios de vizinhos</text>
+      <text x="495" y="236" text-anchor="middle" font-size="14.5" fill="#686970">Calcula notas por bairro</text>
+
+      <!-- Banco de Dados -->
+      <rect x="745" y="18" width="235" height="100" rx="18" fill="#f7f6f8" stroke="#dedee6" stroke-width="2"/>
+      <text x="862" y="58" text-anchor="middle" font-size="20" font-weight="700">Banco de Dados</text>
+      <text x="862" y="82" text-anchor="middle" font-size="15" fill="#e40f37" font-weight="700">PostgreSQL + PostGIS</text>
+      <text x="862" y="103" text-anchor="middle" font-size="14" fill="#686970">Usuários, relatos e notas</text>
+
+      <!-- Mapas e Clima -->
+      <rect x="745" y="140" width="235" height="100" rx="18" fill="#f7f6f8" stroke="#dedee6" stroke-width="2"/>
+      <text x="862" y="180" text-anchor="middle" font-size="20" font-weight="700">Mapas e Clima</text>
+      <text x="862" y="204" text-anchor="middle" font-size="15" fill="#e40f37" font-weight="700">Google Maps + INMET</text>
+      <text x="862" y="225" text-anchor="middle" font-size="14" fill="#686970">Geolocalização e chuvas</text>
+
+      <!-- Inteligência Artificial -->
+      <rect x="745" y="262" width="235" height="100" rx="18" fill="#f7f6f8" stroke="#dedee6" stroke-width="2"/>
+      <text x="862" y="302" text-anchor="middle" font-size="20" font-weight="700">Serviço de IA</text>
+      <text x="862" y="326" text-anchor="middle" font-size="15" fill="#e40f37" font-weight="700">Google Gemini API</text>
+      <text x="862" y="347" text-anchor="middle" font-size="14" fill="#686970">Resumo dos comentários</text>
+
+      <!-- Setas de comunicacao -->
+      <line x1="250" y1="190" x2="358" y2="190" stroke="#e40f37" stroke-width="4" marker-end="url(#seta)"/>
+      <text x="304" y="176" text-anchor="middle" font-size="15" fill="#686970">HTTPS / JSON</text>
+
+      <line x1="625" y1="145" x2="738" y2="75" stroke="#e40f37" stroke-width="3.5" marker-end="url(#seta)"/>
+      <line x1="625" y1="190" x2="738" y2="190" stroke="#e40f37" stroke-width="3.5" marker-end="url(#seta)"/>
+      <line x1="625" y1="235" x2="738" y2="305" stroke="#e40f37" stroke-width="3.5" marker-end="url(#seta)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- 10 · NÚMEROS (Item 6: Diferenciais e impacto esperado) -->
+<section class="slide">
+  <img class="logo-cabecalho" src="logo_fiap.png" alt="Logo FIAP">
+  <h2>Diferenciais e impacto para o cidadão</h2>
+  <p class="sub">Benefícios diretos para quem procura moradia e para quem já mora.</p>
+  <div class="corpo numeros">
+    <div><strong>100%</strong>focado no cidadão, sem anúncios</div>
+    <div><strong>5</strong>indicadores claros por bairro</div>
+    <div><strong>3</strong>estados simulados no protótipo</div>
+    <div><strong>2</strong>públicos atendidos na mesma base</div>
+  </div>
+</section>
+
+<!-- 11 · LINKS DO PROTÓTIPO E VÍDEO PITCH (Itens 4 e 7 da Global Solution) -->
+<section class="slide">
+  <img class="logo-cabecalho" src="logo_fiap.png" alt="Logo FIAP">
+  <h2>Protótipo navegável e vídeo pitch</h2>
+  <p class="sub">Links com acesso público liberado para avaliação da entrega.</p>
+  <div class="corpo" style="display: flex; flex-direction: column; gap: 18px; justify-content: center;">
+
+    <!-- Card 1: Link do Protótipo Navegável -->
+    <div style="border: 1px solid var(--linha); border-top: 6px solid var(--acento); border-radius: 16px; padding: 20px 28px; background: #fff;">
+      <span class="chip" style="margin-bottom: 8px;">Item 4 · Protótipo Navegável</span>
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <strong style="font-size: 18pt; display: block;">Simulador Interativo RadarBairro (Mobile)</strong>
+          <span style="color: var(--suave); font-size: 12.5pt;">Link público na Vercel: <a href="https://radarbairro-beta.vercel.app" target="_blank" style="color: var(--acento); font-weight: 700; text-decoration: underline;">https://radarbairro-beta.vercel.app</a></span>
+        </div>
+        <a href="https://radarbairro-beta.vercel.app" target="_blank" style="background: var(--acento); color: #fff; text-decoration: none; font-weight: 700; font-size: 13pt; padding: 10px 24px; border-radius: 10px;">Abrir Protótipo →</a>
+      </div>
+    </div>
+
+    <!-- Card 2: Link do Pitch no YouTube (Obrigatório no último slide) -->
+    <div style="border: 1px solid var(--linha); border-top: 6px solid #221f1f; border-radius: 16px; padding: 20px 28px; background: var(--fundo-claro);">
+      <span class="chip" style="background: #221f1f; margin-bottom: 8px;">Item 7 · Vídeo Pitch no YouTube (Até 3 Minutos)</span>
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <strong style="font-size: 18pt; display: block;">Apresentação Pitch · Renan Santa Rosa Xavier (RM 566997)</strong>
+          <span style="color: var(--suave); font-size: 12.5pt;">Link público do YouTube: <a href="https://youtu.be/PsAmejXaunc" target="_blank" style="color: var(--acento); font-weight: 700; text-decoration: underline;">https://youtu.be/PsAmejXaunc</a></span>
+        </div>
+        <a href="https://youtu.be/PsAmejXaunc" target="_blank" style="background: #221f1f; color: #fff; text-decoration: none; font-weight: 700; font-size: 13pt; padding: 10px 24px; border-radius: 10px;">Assistir no YouTube →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>
